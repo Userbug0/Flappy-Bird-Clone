@@ -5,10 +5,6 @@ ParticlesGenerator::ParticlesGenerator()
 	: m_EmitterPosition(0.f), m_ElapsedTime(0)
 {
 	m_ParticlePool.resize(m_PoolIndex + 1);
-
-	auto& shader = Renderer2D::GetShader();
-	shader->Bind();
-	shader->SetFloat2("u_ViewportSize", { 1280, 720 });
 }
 
 void ParticlesGenerator::OnUpdate(Time frameTime)
@@ -73,20 +69,4 @@ void ParticlesGenerator::GetEmitterPosition(float seconds)
 	m_EmitterPosition = Vector2(
 		sin(m_ElapsedTime * 5.f) * 1.5f - 0.75f, 
 		-0.5f + sin(m_ElapsedTime * 4) * 1.5f);
-}
-
-
-void ParticlesGenerator::OnEvent(Event& event)
-{
-	EventDispatcher dispatcher(event);
-	dispatcher.Dispatch<WindowResizedEvent>(ATN_BIND_EVENT_FN(ParticlesGenerator::OnWindowResized));
-}
-
-bool ParticlesGenerator::OnWindowResized(WindowResizedEvent& event)
-{
-	auto& shader = Renderer2D::GetShader();
-
-	shader->SetFloat2("u_ViewportSize", { (float)event.GetWidth(), (float)event.GetHeight() });
-
-	return false;
 }

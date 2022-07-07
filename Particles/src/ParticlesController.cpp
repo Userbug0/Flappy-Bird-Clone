@@ -21,7 +21,13 @@ void ParticlesController::OnImGuiRender()
 {
 	ImGui::Begin("Edit");
 
-	ImGui::ColorEdit4("Square Color", m_ParticleDesc.ColorBegin.Data());
+	ImGui::ColorEdit4("Begin Color", m_ParticleDesc.ColorBegin.Data());
+	ImGui::ColorEdit4("End Color", m_ParticleDesc.ColorEnd.Data());
+
+	ImGui::DragFloat2("Velocity", m_ParticleDesc.VelocityVariation.Data(), 0.1f, 1, 10);
+	ImGui::DragFloat("Size", &m_ParticleDesc.SizeBegin, 0.1f, 0.1f, 1.f);
+
+	ImGui::DragFloat("Life Time", &m_ParticleDesc.LifeTime, 0.1f, 0.1f, 10.f);
 
 	ImGui::End();
 }
