@@ -5,6 +5,10 @@ ParticlesGenerator::ParticlesGenerator()
 	: m_EmitterPosition(0.f), m_ElapsedTime(0)
 {
 	m_ParticlePool.resize(m_PoolIndex + 1);
+
+	auto& shader = Renderer2D::GetShader();
+	shader->Bind();
+	shader->SetFloat2("u_ViewportSize", { 1280, 720 });
 }
 
 void ParticlesGenerator::OnUpdate(Time frameTime)
@@ -24,6 +28,7 @@ void ParticlesGenerator::OnUpdate(Time frameTime)
 		}
 
 		particle.LifeRemaning -= seconds;
+
 		particle.Position += particle.Velocity * seconds;
 
 		RenderParticle(particle);
@@ -32,15 +37,29 @@ void ParticlesGenerator::OnUpdate(Time frameTime)
 
 void ParticlesGenerator::RenderParticle(const Particle& particle)
 {
-	Renderer2D::DrawQuad(m_EmitterPosition, { 1.f, 1.f }, particle.ColorBegin);
+	float life = particle.LifeRemaning / particle.LifeTime;
+
+	Color color = Lerp(particle.ColorEnd, particle.ColorBegin, life);
+	float size = Lerp(particle.SizeEnd, particle.SizeBegin, life);
+
+	Renderer2D::DrawQuad(particle.Position, { size, size }, color);
 }
 
 void ParticlesGenerator::Emit(const ParticleDesc& desc)
 {
 	Particle& particle = m_ParticlePool[m_PoolIndex];
-
 	particle.Active = true;
+
 	particle.ColorBegin = desc.ColorBegin;
+	particle.ColorEnd = desc.ColorEnd;
+
+	particle.SizeBegin = desc.SizeBegin + desc.SizeVariation * (Random::Float() - 0.5f);
+	particle.SizeEnd = desc.SizeEnd;	
+
+	particle.Position = m_EmitterPosition;
+	particle.Velocity = desc.Velocity;
+	particle.Velocity.x += desc.VelocityVariation.x * (Random::Float() - 0.5f);
+	particle.Velocity.y += desc.VelocityVariation.y * (Random::Float() - 0.5f);
 
 	particle.LifeTime = desc.LifeTime;
 	particle.LifeRemaning = desc.LifeTime;
@@ -50,8 +69,24 @@ void ParticlesGenerator::Emit(const ParticleDesc& desc)
 
 void ParticlesGenerator::GetEmitterPosition(float seconds)
 {
-	m_ElapsedTime += seconds * 0.1f;
+	m_ElapsedTime += seconds * 0.3f;
 	m_EmitterPosition = Vector2(
 		sin(m_ElapsedTime * 5.f) * 1.5f - 0.75f, 
-		-0.5f + sin(m_ElapsedTime * 4) * 1.5);
+		-0.5f + sin(m_ElapsedTime * 4) * 1.5f);
+}
+
+
+void ParticlesGenerator::OnEvent(Event& event)
+{
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<WindowResizedEvent>(ATN_BIND_EVENT_FN(ParticlesGenerator::OnWindowResized));
+}
+
+bool ParticlesGenerator::OnWindowResized(WindowResizedEvent& event)
+{
+	auto& shader = Renderer2D::GetShader();
+
+	shader->SetFloat2("u_ViewportSize", { (float)event.GetWidth(), (float)event.GetHeight() });
+
+	return false;
 }

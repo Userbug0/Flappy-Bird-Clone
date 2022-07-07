@@ -183,7 +183,8 @@ namespace Athena
 			return m_UniformLocationCache[name];
 
 		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		ATN_ASSERT(location != -1, "Uniform name does not exist!");
+		if(location == - 1)
+			ATN_CORE_WARN("Uniform name: '{0}'  does not exist!", name);
 		m_UniformLocationCache[name] = location;
 
 		return location;
@@ -208,6 +209,13 @@ namespace Athena
 		ATN_PROFILE_FUNCTION();
 
 		UploadUniformFloat(name, value);
+	}
+
+	void OpenGLShader::SetFloat2(const std::string& name, const Vector2& vec2)
+	{
+		ATN_PROFILE_FUNCTION();
+
+		UploadUniformFloat2(name, vec2);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const Vector3& vec3)

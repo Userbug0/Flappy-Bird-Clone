@@ -41,4 +41,5 @@ void ParticlesLayer::OnImGuiRender()
 void ParticlesLayer::OnEvent(Event& event)
 {
 	m_CameraController.OnEvent(event);
+	m_Generator.OnEvent(event);
 }

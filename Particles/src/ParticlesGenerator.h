@@ -16,11 +16,14 @@ public:
 	ParticlesGenerator();
 
 	void OnUpdate(Time frameTime);
+	void OnEvent(Event& event);
 	void Emit(const ParticleDesc& desc);
 
 private:
 	void GetEmitterPosition(float seconds);
 	void RenderParticle(const Particle& particle);
+
+	bool OnWindowResized(WindowResizedEvent& event);
 
 private:
 	struct Particle

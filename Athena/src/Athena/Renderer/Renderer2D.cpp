@@ -10,6 +10,7 @@ namespace Athena
 	struct QuadVertex
 	{
 		Vector3 Position;
+		float Size;
 		Color Color;	// Vector<4, float> has issues with allignment
 		Vector2 TexCoord;
 		float TexIndex;
@@ -42,6 +43,11 @@ namespace Athena
 
 	static Renderer2DData s_Data;
 
+	const Ref<Shader>& Renderer2D::GetShader()
+	{
+		return s_Data.TextureShader;
+	}
+
 	void Renderer2D::Init()
 	{
 		ATN_PROFILE_FUNCTION();
@@ -51,6 +57,7 @@ namespace Athena
 		BufferLayout layout = 
 		{ 
 			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float, "a_Size"},
 			{ShaderDataType::Float4, "a_Color"},
 			{ShaderDataType::Float2, "a_TexCoord"},
 			{ShaderDataType::Float, "a_TexIndex"},
@@ -175,6 +182,7 @@ namespace Athena
 		for (size_t i = 0; i < QuadVertexCount; ++i)
 		{
 			s_Data.QuadVertexBufferPointer->Position = s_Data.QuadVertexPositions[i] * transform;
+			s_Data.QuadVertexBufferPointer->Size = (size.x + size.y) / 2;
 			s_Data.QuadVertexBufferPointer->Color = color;
 			s_Data.QuadVertexBufferPointer->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPointer->TexIndex = textureIndex;
@@ -225,6 +233,7 @@ namespace Athena
 		for (size_t i = 0; i < QuadVertexCount; ++i)
 		{
 			s_Data.QuadVertexBufferPointer->Position = s_Data.QuadVertexPositions[i] * transform;
+			s_Data.QuadVertexBufferPointer->Size = (size.x + size.y) / 2;
 			s_Data.QuadVertexBufferPointer->Color = tint;
 			s_Data.QuadVertexBufferPointer->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPointer->TexIndex = textureIndex;
@@ -262,6 +271,7 @@ namespace Athena
 		for (size_t i = 0; i < QuadVertexCount; ++i)
 		{
 			s_Data.QuadVertexBufferPointer->Position = s_Data.QuadVertexPositions[i] * transform;
+			s_Data.QuadVertexBufferPointer->Size = (size.x + size.y) / 2;
 			s_Data.QuadVertexBufferPointer->Color = color;
 			s_Data.QuadVertexBufferPointer->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPointer->TexIndex = textureIndex;
@@ -314,6 +324,7 @@ namespace Athena
 		for (size_t i = 0; i < QuadVertexCount; ++i)
 		{
 			s_Data.QuadVertexBufferPointer->Position = s_Data.QuadVertexPositions[i] * transform;
+			s_Data.QuadVertexBufferPointer->Size = (size.x + size.y) / 2;
 			s_Data.QuadVertexBufferPointer->Color = tint;
 			s_Data.QuadVertexBufferPointer->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPointer->TexIndex = textureIndex;

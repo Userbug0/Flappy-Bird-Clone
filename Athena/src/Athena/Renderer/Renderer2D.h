@@ -3,6 +3,7 @@
 #include "Athena/Renderer/OrthographicCamera.h"
 #include "Athena/Renderer/Color.h"
 #include "Athena/Renderer/Texture.h"
+#include "Athena/Renderer/Shader.h"
 
 
 namespace Athena
@@ -29,6 +30,7 @@ namespace Athena
 		static void DrawRotatedQuad(const Vector2& position, const Vector2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.f, const Color& tint = Color::White);
 		static void DrawRotatedQuad(const Vector3& position, const Vector2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.f, const Color& tint = Color::White);
 
+		static const Ref<Shader>& GetShader();
 
 		// Stats
 		struct Statistics
