@@ -19,7 +19,6 @@ public:
 	void Emit(const ParticleDesc& desc);
 
 private:
-	void GetEmitterPosition(float seconds);
 	void RenderParticle(const Particle& particle);
 
 private:
@@ -28,6 +27,7 @@ private:
 		Vector2 Position;
 		Vector2 Velocity;
 		Color ColorBegin, ColorEnd;
+		float Rotation;
 		float SizeBegin, SizeEnd;
 
 		float LifeTime, LifeRemaning;
@@ -37,7 +37,4 @@ private:
 
 	std::vector<Particle> m_ParticlePool;
 	uint32_t m_PoolIndex = 1000;
-
-	Vector2 m_EmitterPosition;
-	float m_ElapsedTime;
 };

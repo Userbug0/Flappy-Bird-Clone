@@ -42,11 +42,6 @@ namespace Athena
 
 	static Renderer2DData s_Data;
 
-	const Ref<Shader>& Renderer2D::GetShader()
-	{
-		return s_Data.TextureShader;
-	}
-
 	void Renderer2D::Init()
 	{
 		ATN_PROFILE_FUNCTION();

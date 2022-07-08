@@ -10,6 +10,15 @@
 
 namespace Athena
 {
+	struct OrthographicCameraBounds
+	{
+		float Left, Right;
+		float Bottom, Top;
+
+		float GetWidth() { return Left - Right; }
+		float GetHeight() { return Top - Bottom; }
+	};
+
 	class OrthographicCameraController
 	{
 	public:
@@ -23,6 +32,8 @@ namespace Athena
 
 		inline void SetZoomLevel(float level) { m_ZoomLevel = level; }
 		inline float GetZoomLevel() const { return m_ZoomLevel; }
+
+		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; };
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& event);
 		bool OnWindowResized(WindowResizedEvent& event);
@@ -32,7 +43,9 @@ namespace Athena
 		float m_ZoomLevel = 1.f;
 		float m_Rotation;
 
+		OrthographicCameraBounds m_Bounds;
 		OrthographicCamera m_Camera;
+
 		Vector3 m_CameraPosition = { 0.f, 0.f, 0.f };
 		float m_CameraRotation = 0.f;
 

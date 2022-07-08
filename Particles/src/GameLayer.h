@@ -8,14 +8,17 @@
 using namespace Athena;
 
 
-class ParticlesLayer : public Layer
+class GameLayer : public Layer
 {
 public:
-	ParticlesLayer();
+	GameLayer();
 
 	void OnUpdate(Time frameTime) override;
 	void OnImGuiRender() override;
 	void OnEvent(Event& event) override;
+
+private:
+	void OnMouseButtonPressed();
 
 private:
 	ParticlesGenerator m_Generator;

@@ -8,7 +8,8 @@ namespace Athena
 {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
 		: m_AspectRatio(aspectRatio), m_Rotation(rotation), 
-		m_Camera(-m_ZoomLevel * m_AspectRatio, m_ZoomLevel * m_AspectRatio, -m_ZoomLevel, m_ZoomLevel)
+		m_Bounds({ -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }), 
+		m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top)
 	{
 
 	}
@@ -57,9 +58,8 @@ namespace Athena
 		m_ZoomLevel -= event.GetYOffset() * 0.4f;
 		m_ZoomLevel = max(m_ZoomLevel, 0.2f);
 
-		m_Camera.SetProjection(-m_ZoomLevel * m_AspectRatio, 
-			m_ZoomLevel * m_AspectRatio, 
-			-m_ZoomLevel, m_ZoomLevel);
+		m_Bounds = { -m_ZoomLevel * m_AspectRatio, m_ZoomLevel * m_AspectRatio, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 
 		m_CameraSpeed = m_ZoomLevel * 1.5f;
 		return false;
@@ -70,9 +70,9 @@ namespace Athena
 		ATN_PROFILE_FUNCTION();
 
 		m_AspectRatio = (float)event.GetWidth() / (float)event.GetHeight();
-		m_Camera.SetProjection(-m_ZoomLevel * m_AspectRatio, 
-			m_ZoomLevel * m_AspectRatio,
-			-m_ZoomLevel, m_ZoomLevel);
+		m_Bounds = { -m_ZoomLevel * m_AspectRatio, m_ZoomLevel * m_AspectRatio, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+
 		return false;
 	}
 }

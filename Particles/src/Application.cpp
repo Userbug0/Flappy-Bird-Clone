@@ -1,7 +1,7 @@
 #include <Athena.h>
 #include <Athena/Core/EntryPoint.h>
 
-#include "ParticlesLayer.h"
+#include "GameLayer.h"
 
 
 class Particles : public Application
@@ -9,7 +9,7 @@ class Particles : public Application
 public:
 	Particles()
 	{
-		PushLayer(new ParticlesLayer());
+		PushLayer(new GameLayer());
 	}
 
 	~Particles()

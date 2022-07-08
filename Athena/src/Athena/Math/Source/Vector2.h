@@ -23,9 +23,6 @@ namespace Athena
 		constexpr Vector(Ty X, Ty Y)
 			: x(X), y(Y) {}
 
-		constexpr Vector(const Vector& other) = default;
-		constexpr Vector& operator=(const Vector& other) = default;
-
 		template <typename U>
 		constexpr Vector<Ty, Size2>(const Vector<U, Size2>& other)
 		{
