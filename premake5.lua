@@ -1,6 +1,6 @@
-workspace "Athena"
+workspace "Particles"
 	architecture "x64"
-	startproject "SandBox"
+	startproject "Particles"
 
 	configurations
 	{ 
