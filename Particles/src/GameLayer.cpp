@@ -4,9 +4,9 @@
 
 
 GameLayer::GameLayer()
-	: Layer("Particles"), m_CameraController(16.f / 9.f), m_SquareColor(Color::White)
+	: Layer("Particles"), m_Generator(10000), m_CameraController(16.f / 9.f), m_SquareColor(Color::White)
 {
-
+	m_CheckerBoard = Texture2D::Create("assets/textures/CheckerBoard.png");
 }
 
 void GameLayer::OnUpdate(Time frameTime)
@@ -20,7 +20,20 @@ void GameLayer::OnUpdate(Time frameTime)
 		OnMouseButtonPressed();
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
+
+	Renderer2D::DrawQuad({ -0.f, -0.f, 0.1f }, { 10.f, 10.f }, m_CheckerBoard, 10, Color(1.f, 0.95f, 0.95f));
+
+	for (float x = -2.5f; x < 2.5f; x += 0.23f)
+	{
+		for (float y = -2.5f; y < 2.5f; y += 0.23f)
+		{
+			Color color = { (x + 2.5f) / 5, 0.4f, (y + 2.5f) / 5, 0.7f };
+			Renderer2D::DrawQuad({ x, y, 0.05f }, { 0.2f, 0.2f }, color);
+		}
+	}
+
 	m_Generator.OnUpdate(frameTime);
+
 	Renderer2D::EndScene();
 }
 
@@ -53,9 +66,9 @@ void GameLayer::OnMouseButtonPressed()
 
 	auto bounds = m_CameraController.GetBounds();
 	Vector3 pos = m_CameraController.GetCamera().GetPosition();
-	x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
+	x = bounds.GetWidth() * 0.5f - (x / width) * bounds.GetWidth();
 	y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
-	desc.Position = { -x - pos.x, y + pos.y };
-	for(int i = 0; i < 5; ++i)
+	desc.Position = { x + pos.x, y + pos.y };
+	for(int i = 0; i < desc.Amount; ++i)
 		m_Generator.Emit(desc);
 }

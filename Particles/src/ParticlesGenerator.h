@@ -13,7 +13,7 @@ private:
 	struct Particle;
 
 public:
-	ParticlesGenerator();
+	ParticlesGenerator(uint32_t maxParticles);
 
 	void OnUpdate(Time frameTime);
 	void Emit(const ParticleDesc& desc);
@@ -36,5 +36,5 @@ private:
 	};
 
 	std::vector<Particle> m_ParticlePool;
-	uint32_t m_PoolIndex = 1000;
+	uint32_t m_PoolIndex;
 };

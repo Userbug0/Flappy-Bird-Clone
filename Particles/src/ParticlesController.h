@@ -12,6 +12,7 @@ struct ParticleDesc
 	Color ColorBegin, ColorEnd;
 	float SizeBegin, SizeEnd, SizeVariation;
 	float LifeTime = 0.5f;
+	float Amount;
 };
 
 

@@ -23,7 +23,8 @@ private:
 private:
 	ParticlesGenerator m_Generator;
 	ParticlesController m_Controller;
-
-	Color m_SquareColor;
 	OrthographicCameraController m_CameraController;
+
+	Ref<Texture2D> m_CheckerBoard;
+	Color m_SquareColor;
 };

@@ -1,9 +1,10 @@
 #include "ParticlesGenerator.h"
 
 
-ParticlesGenerator::ParticlesGenerator()
+ParticlesGenerator::ParticlesGenerator(uint32_t maxParticles)
+	: m_PoolIndex(maxParticles - 1)
 {
-	m_ParticlePool.resize(m_PoolIndex + 1);
+	m_ParticlePool.resize(maxParticles);
 }
 
 void ParticlesGenerator::OnUpdate(Time frameTime)
