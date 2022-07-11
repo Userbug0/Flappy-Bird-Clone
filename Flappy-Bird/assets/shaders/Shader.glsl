@@ -12,6 +12,8 @@ out vec2 v_TexCoord;
 out float v_TexIndex;
 out float v_TilingFactor;
 
+out vec2 v_FragPos;
+
 uniform mat4 u_ViewProjection;
 
 void main()
@@ -22,6 +24,7 @@ void main()
 	v_TilingFactor = a_TilingFactor;
 
 	gl_Position = u_ViewProjection * vec4(a_Position, 1);
+	v_FragPos = gl_Position.xy;
 }
 
 
@@ -35,11 +38,16 @@ in vec2 v_TexCoord;
 in float v_TexIndex;
 in float v_TilingFactor;
 
-uniform sampler2D u_Texture[32];
+in vec2 v_FragPos;
 
-uniform vec2 u_ViewportSize;
+uniform sampler2D u_Texture[32];
 
 void main()
 {
-	out_Color = texture(u_Texture[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
+	vec4 color = texture(u_Texture[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
+
+	float dist = 1.0 - distance(v_FragPos * 0.8, vec2(0.0));
+	dist = clamp(dist, 0.0, 1.0);
+	dist = sqrt(dist);
+	out_Color = color * dist;
 }

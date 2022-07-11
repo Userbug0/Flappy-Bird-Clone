@@ -68,5 +68,5 @@ void Player::OnUpdate(Time frameTime)
 void Player::OnRender()
 {
 	m_ParticleSystem.OnRender();
-	Renderer2D::DrawRotatedQuad({m_Position.x, m_Position.y, 0.f}, { 1, 1.5f }, DegreeToRad(m_Rotation), m_Rocket);
+	Renderer2D::DrawRotatedQuad({m_Position.x, m_Position.y, 0.f}, { 0.87f, 1.3f }, DegreeToRad(m_Rotation), m_Rocket);
 }

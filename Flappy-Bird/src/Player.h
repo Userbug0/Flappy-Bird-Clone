@@ -25,8 +25,8 @@ private:
 	ParticleDesc m_EngineParticle;
 	ParticleDesc m_SmokeParticle;
 
-	Vector2 m_Position = { -0.5f, 0 };
-	Vector2 m_Velocity = { 0.1f, 0 };
+	Vector2 m_Position = { -10.f, 0 };
+	Vector2 m_Velocity = { 5.f, 0 };
 	float m_Rotation = -90.f;
 
 	float m_Gravity = 2.f;
