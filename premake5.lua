@@ -1,6 +1,6 @@
-workspace "Particles"
+workspace "Flappy-Bird"
 	architecture "x64"
-	startproject "Particles"
+	startproject "Flappy-Bird"
 
 	configurations
 	{ 
@@ -99,8 +99,8 @@ project "Athena"
 		optimize "On"
 	
 
-project "Particles"
-	location "Particles"
+project "Flappy-Bird"
+	location "Flappy-Bird"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

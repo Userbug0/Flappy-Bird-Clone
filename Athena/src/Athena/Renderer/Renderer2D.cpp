@@ -89,7 +89,7 @@ namespace Athena
 		for (int32_t i = 0; i < std::size(samplers); ++i)
 			samplers[i] = i;
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/Particles.glsl");
+		s_Data.TextureShader = Shader::Create("assets/shaders/Shader.glsl");
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetIntArray("u_Texture", samplers, s_Data.MaxTextureSlots);
 
@@ -207,13 +207,16 @@ namespace Athena
 		{
 			if (*s_Data.TextureSlots[i] == *texture)
 			{
-				textureIndex = 0;
+				textureIndex = (float)i;
 				break;
 			}
 		}
 
 		if (textureIndex == 0.0f)
 		{
+			if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+				NextBatch();
+
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 			s_Data.TextureSlotIndex++;
@@ -294,13 +297,16 @@ namespace Athena
 		{
 			if (*s_Data.TextureSlots[i] == *texture)
 			{
-				textureIndex = 0;
+				textureIndex = (float)i;
 				break;
 			}
 		}
 
 		if (textureIndex == 0.0f)
 		{
+			if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+				NextBatch();
+
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 			s_Data.TextureSlotIndex++;

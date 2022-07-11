@@ -6,7 +6,8 @@
 GameLayer::GameLayer()
 	: Layer("Particles"), m_Generator(10000), m_CameraController(16.f / 9.f), m_SquareColor(Color::White)
 {
-	m_CheckerBoard = Texture2D::Create("assets/textures/CheckerBoard.png");
+	m_Bird = Texture2D::Create("assets/textures/bird.png");
+	m_Triangle = Texture2D::Create("assets/textures/Triangle.png");
 }
 
 void GameLayer::OnUpdate(Time frameTime)
@@ -21,16 +22,8 @@ void GameLayer::OnUpdate(Time frameTime)
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Renderer2D::DrawQuad({ -0.f, -0.f, 0.1f }, { 10.f, 10.f }, m_CheckerBoard, 10, Color(1.f, 0.95f, 0.95f));
-
-	for (float x = -2.5f; x < 2.5f; x += 0.23f)
-	{
-		for (float y = -2.5f; y < 2.5f; y += 0.23f)
-		{
-			Color color = { (x + 2.5f) / 5, 0.4f, (y + 2.5f) / 5, 0.7f };
-			Renderer2D::DrawQuad({ x, y, 0.05f }, { 0.2f, 0.2f }, color);
-		}
-	}
+	Renderer2D::DrawQuad({ -0.5f, -0.f, 0.1f }, { 1.f, 1.f }, m_Bird);
+	Renderer2D::DrawQuad({ 1.f, -1.f, 0.1f }, { 3.f, 4.f }, m_Triangle);
 
 	m_Generator.OnUpdate(frameTime);
 
