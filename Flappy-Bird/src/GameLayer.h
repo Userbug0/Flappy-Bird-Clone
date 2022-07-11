@@ -21,11 +21,9 @@ private:
 	void OnMouseButtonPressed();
 
 private:
-	ParticlesGenerator m_Generator;
 	ParticlesController m_Controller;
 	OrthographicCameraController m_CameraController;
 
 	Ref<Texture2D> m_Bird;
-	Ref<Texture2D> m_Triangle;
 	Color m_SquareColor;
 };

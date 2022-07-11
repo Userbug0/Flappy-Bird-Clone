@@ -6,7 +6,7 @@
 GameLayer::GameLayer()
 	: Layer("Particles"), m_Generator(10000), m_CameraController(16.f / 9.f), m_SquareColor(Color::White)
 {
-	m_Bird = Texture2D::Create("assets/textures/bird.png");
+	m_Bird = Texture2D::Create("assets/textures/rocket.png");
 	m_Triangle = Texture2D::Create("assets/textures/Triangle.png");
 }
 
@@ -22,8 +22,8 @@ void GameLayer::OnUpdate(Time frameTime)
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Renderer2D::DrawQuad({ -0.5f, -0.f, 0.1f }, { 1.f, 1.f }, m_Bird);
-	Renderer2D::DrawQuad({ 1.f, -1.f, 0.1f }, { 3.f, 4.f }, m_Triangle);
+	Renderer2D::DrawQuad({ -3.f, -0.f, 0.1f }, { 1.f, 2.f }, m_Bird);
+	Renderer2D::DrawQuad({ 0.f, -0.f, 0.1f }, { 3.f, 4.f }, m_Triangle);
 
 	m_Generator.OnUpdate(frameTime);
 

@@ -4,15 +4,15 @@
 #include "GameLayer.h"
 
 
-class Particles : public Application
+class FlappyBird : public Application
 {
 public:
-	Particles()
+	FlappyBird()
 	{
 		PushLayer(new GameLayer());
 	}
 
-	~Particles()
+	~FlappyBird()
 	{
 
 	}
@@ -21,5 +21,5 @@ public:
 
 Athena::Application* Athena::CreateApplication()
 {
-	return new Particles();
+	return new FlappyBird();
 }

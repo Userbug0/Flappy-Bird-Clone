@@ -7,6 +7,16 @@
 using namespace Athena;
 
 
+struct ParticleDesc
+{
+	Vector2 Position;
+	Vector2 Velocity, VelocityVariation;
+	Color ColorBegin, ColorEnd;
+	float SizeBegin, SizeEnd, SizeVariation;
+	float LifeTime = 0.5f;
+};
+
+
 class ParticlesGenerator
 {
 private:
