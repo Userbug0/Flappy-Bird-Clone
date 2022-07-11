@@ -2,7 +2,6 @@
 
 #include <Athena.h>
 
-#include "ParticlesController.h"
 
 using namespace Athena;
 
@@ -23,13 +22,12 @@ private:
 	struct Particle;
 
 public:
-	ParticlesGenerator(uint32_t maxParticles);
+	ParticlesGenerator(uint32_t maxParticles = 1000);
 
 	void OnUpdate(Time frameTime);
-	void Emit(const ParticleDesc& desc);
+	void OnRender();
 
-private:
-	void RenderParticle(const Particle& particle);
+	void Emit(const ParticleDesc& desc);
 
 private:
 	struct Particle

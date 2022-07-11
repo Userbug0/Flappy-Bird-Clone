@@ -27,18 +27,23 @@ void ParticlesGenerator::OnUpdate(Time frameTime)
 		particle.Position += particle.Velocity * seconds;
 		particle.Rotation += 0.01f * seconds;
 
-		RenderParticle(particle);
 	}
 }
 
-void ParticlesGenerator::RenderParticle(const Particle& particle)
+void ParticlesGenerator::OnRender()
 {
-	float life = particle.LifeRemaning / particle.LifeTime;
+	for (auto& particle : m_ParticlePool)
+	{
+		if (!particle.Active)
+			continue;
 
-	Color color = Lerp(particle.ColorEnd, particle.ColorBegin, life);
-	float size = Lerp(particle.SizeEnd, particle.SizeBegin, life);
+		float life = particle.LifeRemaning / particle.LifeTime;
 
-	Renderer2D::DrawRotatedQuad(particle.Position, { size, size }, particle.Rotation, color);
+		Color color = Lerp(particle.ColorEnd, particle.ColorBegin, life);
+		float size = Lerp(particle.SizeEnd, particle.SizeBegin, life);
+
+		Renderer2D::DrawRotatedQuad({ particle.Position.x, particle.Position.y, 0.1f }, { size, size }, particle.Rotation, color);
+	}
 }
 
 void ParticlesGenerator::Emit(const ParticleDesc& desc)

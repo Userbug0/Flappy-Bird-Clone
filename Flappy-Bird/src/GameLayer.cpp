@@ -4,28 +4,31 @@
 
 
 GameLayer::GameLayer()
-	: Layer("Particles"), m_Generator(10000), m_CameraController(16.f / 9.f), m_SquareColor(Color::White)
+	: Layer("Flappy-Bird"), m_State(GameState::Play)
 {
-	m_Bird = Texture2D::Create("assets/textures/rocket.png");
-	m_Triangle = Texture2D::Create("assets/textures/Triangle.png");
+	auto& window = Application::Get().GetWindow();
+	CreateCamera(window.GetWidth(), window.GetHeight());
+}
+
+void GameLayer::OnAttach()
+{
+	m_Level.Init();
 }
 
 void GameLayer::OnUpdate(Time frameTime)
 {
+	if (m_State == GameState::Play)
+	{
+		m_Level.OnUpdate(frameTime);
+		m_Camera->SetPosition(m_Level.GetPlayer().GetPosition());
+	}
+
 	Renderer2D::ResetStats();
 	RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
 
-	m_CameraController.OnUpdate(frameTime);
+	Renderer2D::BeginScene(*m_Camera);
 
-	if (Input::IsMouseButtonPressed(Mouse::Left) || Input::IsMouseButtonPressed(Mouse::Right))
-		OnMouseButtonPressed();
-
-	Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-	Renderer2D::DrawQuad({ -3.f, -0.f, 0.1f }, { 1.f, 2.f }, m_Bird);
-	Renderer2D::DrawQuad({ 0.f, -0.f, 0.1f }, { 3.f, 4.f }, m_Triangle);
-
-	m_Generator.OnUpdate(frameTime);
+	m_Level.OnRender();
 
 	Renderer2D::EndScene();
 }
@@ -41,27 +44,38 @@ void GameLayer::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
 	ImGui::End();
-
-	m_Controller.OnImGuiRender();
 }
 
 void GameLayer::OnEvent(Event& event)
 {
-	m_CameraController.OnEvent(event);
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<WindowResizedEvent>(ATN_BIND_EVENT_FN(GameLayer::OnWindowResize));
+	dispatcher.Dispatch<MouseButtonPressedEvent>(ATN_BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
 }
 
-void GameLayer::OnMouseButtonPressed()
+bool GameLayer::OnWindowResize(WindowResizedEvent& event)
 {
-	auto& desc = m_Controller.GetParticleDesc();
-	int width = Application::Get().GetWindow().GetWidth();
-	int height = Application::Get().GetWindow().GetHeight();
-	auto [x, y] = Input::GetMouse();
+	CreateCamera(event.GetWidth(), event.GetHeight());
+	return false;
+}
 
-	auto bounds = m_CameraController.GetBounds();
-	Vector3 pos = m_CameraController.GetCamera().GetPosition();
-	x = bounds.GetWidth() * 0.5f - (x / width) * bounds.GetWidth();
-	y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
-	desc.Position = { x + pos.x, y + pos.y };
-	for(int i = 0; i < desc.Amount; ++i)
-		m_Generator.Emit(desc);
+bool GameLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event)
+{
+	if (m_State == GameState::GameOver)
+		m_Level.Reset();
+
+	m_State = GameState::Play;
+	return false;
+}
+
+void GameLayer::CreateCamera(uint32_t width, uint32_t height)
+{
+	float aspectRatio = (float)width / (float)height;
+
+	float camWidth = 8.0f;
+	float bottom = -camWidth;
+	float top = camWidth;
+	float left = bottom * aspectRatio;
+	float right = top * aspectRatio;
+	m_Camera = CreateScope<OrthographicCamera>(left, right, bottom, top);
 }

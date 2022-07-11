@@ -15,11 +15,14 @@ struct Pillar
 class Level
 {
 public:
+	Level() = default;
 	void Init();
+	void Reset();
 
 	void OnUpdate(Time frameTime);
 	void OnRender();
-	void OnEvent(Event& event);
+
+	const Player& GetPlayer() const { return m_Player; }
 
 private:
 	Player m_Player;

@@ -3,7 +3,7 @@
 #include "Athena.h"
 
 #include "ParticlesGenerator.h"
-#include "ParticlesController.h"
+#include "Level.h"
 
 using namespace Athena;
 
@@ -13,17 +13,26 @@ class GameLayer : public Layer
 public:
 	GameLayer();
 
+	void OnAttach() override;
+
 	void OnUpdate(Time frameTime) override;
 	void OnImGuiRender() override;
 	void OnEvent(Event& event) override;
 
 private:
-	void OnMouseButtonPressed();
+	void CreateCamera(uint32_t width, uint32_t height);
+	bool OnWindowResize(WindowResizedEvent& event);
+	bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
 
 private:
-	ParticlesController m_Controller;
-	OrthographicCameraController m_CameraController;
+	enum class GameState
+	{
+		Play = 0, Menu = 1, GameOver = 2
+	};
+	GameState m_State;
+
+	Level m_Level;
+	Scope<OrthographicCamera> m_Camera;
 
 	Ref<Texture2D> m_Bird;
-	Color m_SquareColor;
 };
