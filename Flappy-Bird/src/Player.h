@@ -18,6 +18,7 @@ public:
 
 	const Vector2& GetPosition() const { return m_Position; }
 	float GetRotation() const { return m_Rotation; }
+	uint32_t GetScore() const { return uint32_t((m_Position.x + 10.f) / 10.f); }
 
 private:
 	Ref<Texture2D> m_Rocket;

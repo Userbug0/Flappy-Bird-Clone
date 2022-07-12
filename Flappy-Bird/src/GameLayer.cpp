@@ -1,7 +1,5 @@
 #include "GameLayer.h"
 
-#include <ImGui/imgui.h>
-
 
 GameLayer::GameLayer()
 	: Layer("Flappy-Bird"), m_State(GameState::Play)
@@ -13,11 +11,17 @@ GameLayer::GameLayer()
 void GameLayer::OnAttach()
 {
 	m_Level.Init();
+
+	ImGuiIO io = ImGui::GetIO();
+	m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans-Regular.ttf", 120.0f);
 }
 
 void GameLayer::OnUpdate(Time frameTime)
 {
-	if (m_State == GameState::Play)
+
+	switch (m_State)
+	{
+	case GameState::Play:
 	{
 		m_Level.OnUpdate(frameTime);
 
@@ -25,6 +29,14 @@ void GameLayer::OnUpdate(Time frameTime)
 			m_State = GameState::GameOver;
 
 		m_Camera->SetPosition(m_Level.GetPlayer().GetPosition());
+		break;
+	}
+	case GameState::GameOver:
+	{
+		m_ElapsedTime += frameTime.AsSeconds();
+		if ((int)(m_ElapsedTime * 10.0f) % 8 > 4)
+			m_Blink = !m_Blink;
+	}
 	}
 
 	Renderer2D::ResetStats();
@@ -39,22 +51,60 @@ void GameLayer::OnUpdate(Time frameTime)
 
 void GameLayer::OnImGuiRender()
 {
-	ImGui::Begin("Renderer2D Stats");
+	//ImGui::Begin("Renderer2D Stats");
 
-	auto stats = Renderer2D::GetStats();
-	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-	ImGui::Text("Quads: %d", stats.QuadCount);
-	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	//auto stats = Renderer2D::GetStats();
+	//ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+	//ImGui::Text("Quads: %d", stats.QuadCount);
+	//ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+	//ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-	ImGui::End();
+	//ImGui::End();
+
+	switch (m_State)
+	{
+	case GameState::Play:
+	{
+		uint32_t playerScore = m_Level.GetPlayer().GetScore();
+		std::string scoreStr = std::string("Score: ") + std::to_string(playerScore);
+		ImGui::GetForegroundDrawList()->AddText(m_Font, 48.0f, ImGui::GetWindowPos(), 0xffffffff, scoreStr.c_str());
+		break;
+	}
+	case GameState::Menu:
+	{
+		auto pos = ImGui::GetWindowPos();
+		auto width = Application::Get().GetWindow().GetWidth();
+		auto height = Application::Get().GetWindow().GetHeight();
+		pos.x += width * 0.5f - 400.0f;
+		pos.y += 50.0f;
+		ImGui::GetForegroundDrawList()->AddText(m_Font, 120.0f, pos, 0xffffffff, "Press Enter to Play!");
+		break;
+	}
+	case GameState::GameOver:
+	{
+		auto pos = ImGui::GetWindowPos();
+		auto width = Application::Get().GetWindow().GetWidth();
+		auto height = Application::Get().GetWindow().GetHeight();
+		pos.x += width * 0.5f - 400.0f;
+		pos.y += 50.0f;
+		if (m_Blink)
+			ImGui::GetForegroundDrawList()->AddText(m_Font, 120.0f, pos, 0xffffffff, "Press Enter to Play!");
+
+		pos.x += 300.0f;
+		pos.y += 150.0f;
+		uint32_t playerScore = m_Level.GetPlayer().GetScore();
+		std::string scoreStr = std::string("Score: ") + std::to_string(playerScore);
+		ImGui::GetForegroundDrawList()->AddText(m_Font, 48.0f, pos, 0xffffffff, scoreStr.c_str());
+		break;
+	}
+	}
 }
 
 void GameLayer::OnEvent(Event& event)
 {
 	EventDispatcher dispatcher(event);
 	dispatcher.Dispatch<WindowResizedEvent>(ATN_BIND_EVENT_FN(GameLayer::OnWindowResize));
-	dispatcher.Dispatch<MouseButtonPressedEvent>(ATN_BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
+	dispatcher.Dispatch<KeyPressedEvent>(ATN_BIND_EVENT_FN(GameLayer::OnKeyPressed));
 }
 
 bool GameLayer::OnWindowResize(WindowResizedEvent& event)
@@ -63,12 +113,27 @@ bool GameLayer::OnWindowResize(WindowResizedEvent& event)
 	return false;
 }
 
-bool GameLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event)
+bool GameLayer::OnKeyPressed(KeyPressedEvent & event)
 {
-	if (m_State == GameState::GameOver)
-		m_Level.Reset();
+	KeyCode key = event.GetKeyCode();
+	if (key == Key::Enter)
+	{
+		if (m_State == GameState::GameOver)
+		{
+			m_Level.Reset();
+			m_State = GameState::Play;
+		}
+		else if (m_State == GameState::Menu)
+		{
+			m_State = GameState::Play;
+		}
+	}
 
-	m_State = GameState::Play;
+	else if (key == Key::Escape)
+	{
+		m_State = GameState::Menu;
+	}
+
 	return false;
 }
 

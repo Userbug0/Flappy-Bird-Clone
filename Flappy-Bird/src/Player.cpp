@@ -3,8 +3,8 @@
 
 void Player::Reset()
 {
-	m_Position = { -0.5f, 0.0f };
-	m_Velocity = { 0.1f, 0.0f };
+	m_Position = { -10.f, 0 };
+	m_Velocity = { 5.f, 0 };
 }
 
 void Player::Init()
@@ -36,7 +36,7 @@ void Player::OnUpdate(Time frameTime)
 {
 	float seconds = frameTime.AsSeconds();
 
-	if (Input::IsMouseButtonPressed(Mouse::Left))
+	if (Input::IsMouseButtonPressed(Mouse::Left) || Input::IsKeyPressed(Key::Space))
 	{
 		m_Velocity.y += m_EnginePower * seconds;
 

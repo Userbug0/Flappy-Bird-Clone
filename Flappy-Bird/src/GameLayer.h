@@ -5,6 +5,9 @@
 #include "ParticlesGenerator.h"
 #include "Level.h"
 
+#include <ImGui/imgui.h>
+
+
 using namespace Athena;
 
 
@@ -21,8 +24,9 @@ public:
 
 private:
 	void CreateCamera(uint32_t width, uint32_t height);
+
 	bool OnWindowResize(WindowResizedEvent& event);
-	bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
+	bool OnKeyPressed(KeyPressedEvent& event);
 
 private:
 	enum class GameState
@@ -33,6 +37,8 @@ private:
 
 	Level m_Level;
 	Scope<OrthographicCamera> m_Camera;
+	ImFont* m_Font;
 
-	Ref<Texture2D> m_Bird;
+	bool m_Blink = false;
+	float m_ElapsedTime = 0.f;
 };
