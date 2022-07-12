@@ -26,11 +26,14 @@ public:
 	void OnUpdate(Time frameTime);
 	void OnRender();
 
+	void GameOver();
+
 	const Player& GetPlayer() const { return m_Player; }
 	bool IsGameOver() const { return m_GameOver; }
 
 private:
 	void CreatePillar(size_t index, float offset);
+	bool CollisionTest();
 
 private:
 	Player m_Player;

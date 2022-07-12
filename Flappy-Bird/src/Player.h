@@ -17,6 +17,7 @@ public:
 	void OnRender();
 
 	const Vector2& GetPosition() const { return m_Position; }
+	float GetRotation() const { return m_Rotation; }
 
 private:
 	Ref<Texture2D> m_Rocket;

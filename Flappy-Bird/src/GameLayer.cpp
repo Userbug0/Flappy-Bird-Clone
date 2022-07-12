@@ -20,6 +20,10 @@ void GameLayer::OnUpdate(Time frameTime)
 	if (m_State == GameState::Play)
 	{
 		m_Level.OnUpdate(frameTime);
+
+		if (m_Level.IsGameOver() == true)
+			m_State = GameState::GameOver;
+
 		m_Camera->SetPosition(m_Level.GetPlayer().GetPosition());
 	}
 
