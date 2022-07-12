@@ -28,13 +28,13 @@ private:
 	ParticleDesc m_SmokeParticle;
 
 	Vector2 m_Position = { -10.f, 0 };
-	Vector2 m_Velocity = { 5.f, 0 };
+	Vector2 m_Velocity = { 4.f, 0 };
 	float m_Rotation = -90.f;
 
-	float m_Gravity = 2.f;
-	float m_EnginePower = 5.f;
+	float m_Gravity = 15.f;
+	float m_EnginePower = 30.f;
 
 	float m_ElapsedTime = 0;
-	float m_SmokeInterval = 1.f;
+	float m_SmokeInterval = 0.4f;
 	float m_SmokeNextTime = m_SmokeInterval;
 };

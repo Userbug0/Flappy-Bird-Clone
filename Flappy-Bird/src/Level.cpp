@@ -69,7 +69,7 @@ void Level::Init()
 
 	m_Pillars.resize(5);
 	for (int i = 0; i < 5; i++)
-		CreatePillar(i, i * 13.0f);
+		CreatePillar(i, i * 10.0f);
 }
 
 void Level::Reset()

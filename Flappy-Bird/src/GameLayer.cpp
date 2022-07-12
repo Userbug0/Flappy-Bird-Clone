@@ -51,16 +51,6 @@ void GameLayer::OnUpdate(Time frameTime)
 
 void GameLayer::OnImGuiRender()
 {
-	//ImGui::Begin("Renderer2D Stats");
-
-	//auto stats = Renderer2D::GetStats();
-	//ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-	//ImGui::Text("Quads: %d", stats.QuadCount);
-	//ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-	//ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-	//ImGui::End();
-
 	switch (m_State)
 	{
 	case GameState::Play:
@@ -110,6 +100,8 @@ void GameLayer::OnEvent(Event& event)
 bool GameLayer::OnWindowResize(WindowResizedEvent& event)
 {
 	CreateCamera(event.GetWidth(), event.GetHeight());
+	m_Camera->SetPosition(m_Level.GetPlayer().GetPosition());
+
 	return false;
 }
 
@@ -141,9 +133,9 @@ void GameLayer::CreateCamera(uint32_t width, uint32_t height)
 {
 	float aspectRatio = (float)width / (float)height;
 
-	float camWidth = 8.0f;
-	float bottom = -camWidth;
-	float top = camWidth;
+	float camHeight = 8.0f;
+	float bottom = -camHeight;
+	float top = camHeight;
 	float left = bottom * aspectRatio;
 	float right = top * aspectRatio;
 	m_Camera = CreateScope<OrthographicCamera>(left, right, bottom, top);

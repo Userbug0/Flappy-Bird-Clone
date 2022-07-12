@@ -4,7 +4,7 @@
 void Player::Reset()
 {
 	m_Position = { -10.f, 0 };
-	m_Velocity = { 5.f, 0 };
+	m_Velocity = { 4.f, 0 };
 }
 
 void Player::Init()
@@ -50,8 +50,10 @@ void Player::OnUpdate(Time frameTime)
 		m_Velocity.y -= m_Gravity * seconds;
 	}
 
-	m_Velocity.y = Clamp(m_Velocity.y, -10.f, 10.f);
-	m_Rotation = -90 + m_Velocity.y * 16;
+	m_Velocity.x += seconds * 0.1f;
+	m_Velocity.y = Clamp(m_Velocity.y, -70.f / 8.f, 80.f / 8.f);
+	m_Rotation = -90 + m_Velocity.y * 8;
+
 	m_Position += m_Velocity * seconds;
 
 	m_ElapsedTime += seconds;

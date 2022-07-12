@@ -46,7 +46,7 @@ void main()
 {
 	vec4 color = texture(u_Texture[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
 
-	float dist = 1.0 - distance(v_FragPos * 0.8, vec2(0.0));
+	float dist = 1.0 - distance(v_FragPos * 0.9, vec2(0.0));
 	dist = clamp(dist, 0.0, 1.0);
 	dist = sqrt(dist);
 	out_Color = color * dist;
